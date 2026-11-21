@@ -52,8 +52,7 @@ public class Player : MonoBehaviour
         // Fix this line so that the Player GameObject is the PARENT of the seed.
         // That way, the seed will move with the player.
 
-        GameObject seed = Instantiate(_seedPrefab);
-
+        GameObject seed = Instantiate(_seedPrefab, transform);
         // STEP 4 -------------------------------------------------------------
 
         _seedRB = seed.GetComponent<Rigidbody>();
@@ -66,7 +65,9 @@ public class Player : MonoBehaviour
         // You might want to use _spawnUp and _spawnLeft to put the seed to the
         //      left and slightly above the player.
         // You will probably also need Transform.TransformDirection() ;)
-
+        Vector3 leftDirection = transform.TransformDirection(Vector3.left);
+        Vector3 spawnPosition = transform.position + leftDirection * _spawnLeft + Vector3.up * _spawnUp;
+        seed.transform.position = spawnPosition;
         
         // STEP 5 -------------------------------------------------------------
     }
@@ -90,7 +91,7 @@ public class Player : MonoBehaviour
 
         // STEP 7 -------------------------------------------------------------
         // Set the animation parameters to play the throwing animation.
-        
+        _animator.SetTrigger("Throwing");
 
 
         // STEP 7 -------------------------------------------------------------
@@ -120,6 +121,8 @@ public class Player : MonoBehaviour
         // Set the animation parameters to play the walking animation.
         // You might need the mouseY, mouseX, vertical, and horizontal variables
         //      that are above this step :)
+        bool isWalking = vertical != 0 || horizontal != 0;
+        _animator.SetBool("Walking", isWalking);
 
 
         // STEP 8 -------------------------------------------------------------
